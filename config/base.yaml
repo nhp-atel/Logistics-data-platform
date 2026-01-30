@@ -1,0 +1,88 @@
+# Base configuration shared across all environments
+# Environment-specific overrides in dev.yaml and prod.yaml
+
+log_level: INFO
+
+gcp:
+  project_id: "${GCP_PROJECT_ID:-logistics-platform}"
+  region: "${GCP_REGION:-us-central1}"
+  zone: "${GCP_ZONE:-us-central1-b}"
+
+pubsub:
+  shipment_events_subscription: "${ENVIRONMENT:-dev}-shipment-events-dataflow"
+  facility_events_subscription: "${ENVIRONMENT:-dev}-facility-events-dataflow"
+  driver_events_subscription: "${ENVIRONMENT:-dev}-driver-events-dataflow"
+  delivery_events_subscription: "${ENVIRONMENT:-dev}-delivery-events-dataflow"
+  unified_subscription: "${ENVIRONMENT:-dev}-unified-events-dataflow"
+  dlq_topic: "projects/${GCP_PROJECT_ID:-logistics-platform}/topics/${ENVIRONMENT:-dev}-unified-events-dlq"
+
+kafka:
+  bootstrap_servers: "${KAFKA_BOOTSTRAP_SERVERS:-}"
+  security_protocol: "SASL_SSL"
+  sasl_mechanism: "PLAIN"
+  consumer_group: "${ENVIRONMENT:-dev}-logistics-consumer"
+  auto_offset_reset: "earliest"
+
+bigquery:
+  raw_dataset: "${ENVIRONMENT:-dev}_raw"
+  clean_dataset: "${ENVIRONMENT:-dev}_clean"
+  curated_dataset: "${ENVIRONMENT:-dev}_curated"
+  features_dataset: "${ENVIRONMENT:-dev}_features"
+  staging_dataset: "${ENVIRONMENT:-dev}_staging"
+
+gcs:
+  raw_bucket: "${GCP_PROJECT_ID:-logistics-platform}-${ENVIRONMENT:-dev}-raw"
+  temp_bucket: "${GCP_PROJECT_ID:-logistics-platform}-${ENVIRONMENT:-dev}-dataflow-temp"
+  staging_bucket: "${GCP_PROJECT_ID:-logistics-platform}-${ENVIRONMENT:-dev}-dataflow-staging"
+  quarantine_bucket: "${GCP_PROJECT_ID:-logistics-platform}-${ENVIRONMENT:-dev}-quarantine"
+
+dataflow:
+  job_name: "logistics-streaming-pipeline"
+  max_workers: 10
+  num_workers: 1
+  machine_type: "n1-standard-4"
+  disk_size_gb: 50
+  enable_streaming_engine: true
+  window_duration_seconds: 300
+  allowed_lateness_seconds: 86400
+
+streaming:
+  window_duration_seconds: 300
+  allowed_lateness_seconds: 86400
+  dedupe_window_hours: 24
+  early_trigger_seconds: 60
+  enable_pii_masking: true
+
+# Event type configuration
+event_types:
+  shipment:
+    - shipment.created
+    - shipment.updated
+    - shipment.cancelled
+    - shipment.in_transit
+    - shipment.delivered
+    - shipment.returned
+  facility:
+    - facility.created
+    - facility.updated
+    - facility.capacity_changed
+    - facility.status_changed
+  driver:
+    - driver.created
+    - driver.updated
+    - driver.assigned
+    - driver.location_updated
+    - driver.status_changed
+  delivery:
+    - delivery.scheduled
+    - delivery.started
+    - delivery.attempted
+    - delivery.completed
+    - delivery.failed
+    - delivery.rescheduled
+
+# Data quality thresholds
+quality:
+  min_daily_events: 100
+  max_null_rate: 0.05
+  max_duplicate_rate: 0.01

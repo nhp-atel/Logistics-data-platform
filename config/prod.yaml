@@ -1,0 +1,45 @@
+# Production environment configuration
+# Overrides base.yaml settings for production
+
+log_level: INFO
+
+dataflow:
+  max_workers: 20
+  num_workers: 3
+  machine_type: "n1-standard-4"
+  disk_size_gb: 100
+  window_duration_seconds: 300
+  allowed_lateness_seconds: 86400
+
+streaming:
+  window_duration_seconds: 300
+  allowed_lateness_seconds: 86400
+  dedupe_window_hours: 24
+  early_trigger_seconds: 60
+  enable_pii_masking: true
+
+# Production quality thresholds
+quality:
+  min_daily_events: 10000
+  max_null_rate: 0.02
+  max_duplicate_rate: 0.001
+
+# Strict SLA thresholds for production
+sla:
+  max_streaming_lag_minutes: 15
+  max_partition_delay_hours: 2
+  min_hourly_events: 100
+
+# Production retention policies
+retention:
+  raw_bucket_nearline_days: 30
+  raw_bucket_coldline_days: 90
+  raw_bucket_archive_days: 365
+  raw_bucket_delete_days: 730
+  bq_partition_expiration_days: 730
+
+# Alerting configuration
+alerting:
+  notification_email: "data-platform-alerts@example.com"
+  pagerduty_enabled: true
+  slack_enabled: true

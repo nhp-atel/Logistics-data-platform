@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://logistics.example.com/schemas/shipment.created.v1.json",
+  "title": "Shipment Created Event",
+  "description": "Event emitted when a new shipment is created",
+  "type": "object",
+  "required": ["shipment_id", "tracking_number", "carrier_id", "service_level", "origin_address", "destination_address"],
+  "properties": {
+    "shipment_id": {
+      "type": "string",
+      "description": "Unique shipment identifier",
+      "pattern": "^[A-Z0-9-]+$"
+    },
+    "tracking_number": {
+      "type": "string",
+      "description": "Tracking number for the shipment"
+    },
+    "carrier_id": {
+      "type": "string",
+      "description": "Carrier identifier"
+    },
+    "service_level": {
+      "type": "string",
+      "enum": ["ground", "express", "overnight", "same_day", "economy", "freight"],
+      "description": "Service level for delivery"
+    },
+    "origin_address": {
+      "$ref": "#/definitions/address"
+    },
+    "destination_address": {
+      "$ref": "#/definitions/address"
+    },
+    "sender": {
+      "$ref": "#/definitions/contact"
+    },
+    "recipient": {
+      "$ref": "#/definitions/contact"
+    },
+    "dimensions": {
+      "$ref": "#/definitions/dimensions"
+    },
+    "declared_value_cents": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Declared value in cents"
+    },
+    "contents_description": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "is_fragile": {
+      "type": "boolean",
+      "default": false
+    },
+    "requires_signature": {
+      "type": "boolean",
+      "default": false
+    },
+    "estimated_delivery_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scheduled_pickup_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "facility_id": {
+      "type": "string"
+    }
+  },
+  "definitions": {
+    "address": {
+      "type": "object",
+      "required": ["street", "city", "state", "postal_code"],
+      "properties": {
+        "street": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "state": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "postal_code": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "country": {
+          "type": "string",
+          "default": "US",
+          "maxLength": 2
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "required": ["length_cm", "width_cm", "height_cm", "weight_kg"],
+      "properties": {
+        "length_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "width_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "weight_kg": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    }
+  }
+}

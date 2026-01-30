@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://logistics.example.com/schemas/delivery.completed.v1.json",
+  "title": "Delivery Completed Event",
+  "description": "Event emitted when a delivery is successfully completed",
+  "type": "object",
+  "required": ["delivery_id", "shipment_id", "driver_id", "completed_at", "delivery_location", "location"],
+  "properties": {
+    "delivery_id": {
+      "type": "string",
+      "description": "Unique delivery identifier"
+    },
+    "shipment_id": {
+      "type": "string",
+      "description": "Associated shipment ID"
+    },
+    "driver_id": {
+      "type": "string",
+      "description": "Driver who completed the delivery"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Completion timestamp"
+    },
+    "delivery_location": {
+      "type": "string",
+      "enum": [
+        "front_door",
+        "back_door",
+        "side_door",
+        "garage",
+        "mailroom",
+        "reception",
+        "locker",
+        "neighbor",
+        "safe_place",
+        "in_person"
+      ],
+      "description": "Where the package was left"
+    },
+    "location": {
+      "type": "object",
+      "required": ["latitude", "longitude"],
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "accuracy_meters": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "signature_obtained": {
+      "type": "boolean",
+      "default": false
+    },
+    "signed_by": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "Name of person who signed (PII)"
+    },
+    "photo_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to proof of delivery photo"
+    },
+    "delivery_notes": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "attempt_count": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1
+    },
+    "scheduled_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "was_on_time": {
+      "type": "boolean"
+    },
+    "time_variance_minutes": {
+      "type": "integer",
+      "description": "Minutes early (negative) or late (positive)"
+    }
+  }
+}

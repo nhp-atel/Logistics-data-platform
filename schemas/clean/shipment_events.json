@@ -1,0 +1,92 @@
+{
+  "description": "Silver layer table for shipment events",
+  "schema": [
+    {
+      "name": "event_id",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Unique event identifier (UUID)"
+    },
+    {
+      "name": "event_type",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Event type (e.g., shipment.created)"
+    },
+    {
+      "name": "event_version",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Schema version (e.g., v1, v2)"
+    },
+    {
+      "name": "event_time",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED",
+      "description": "Business event time (partition key)"
+    },
+    {
+      "name": "ingest_time",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED",
+      "description": "Pipeline ingestion time"
+    },
+    {
+      "name": "trace_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Distributed tracing ID"
+    },
+    {
+      "name": "source_system",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Origin system identifier"
+    },
+    {
+      "name": "shipment_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Shipment identifier (clustering key)"
+    },
+    {
+      "name": "tracking_number",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Tracking number"
+    },
+    {
+      "name": "carrier_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Carrier identifier"
+    },
+    {
+      "name": "facility_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Facility identifier"
+    },
+    {
+      "name": "payload",
+      "type": "JSON",
+      "mode": "NULLABLE",
+      "description": "Event-specific payload"
+    },
+    {
+      "name": "dedupe_key",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Deduplication key"
+    }
+  ],
+  "partitioning": {
+    "type": "DAY",
+    "field": "event_time"
+  },
+  "clustering": ["shipment_id", "event_type"],
+  "labels": {
+    "layer": "silver",
+    "domain": "shipment"
+  }
+}

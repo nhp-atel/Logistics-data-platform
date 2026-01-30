@@ -1,0 +1,24 @@
+# Dataflow Flex Template Container
+FROM gcr.io/dataflow-templates-base/python311-template-launcher-base:latest
+
+ARG WORKDIR=/template
+WORKDIR ${WORKDIR}
+
+# Copy requirements and install dependencies
+COPY pyproject.toml ./
+COPY src/ ./src/
+COPY config/ ./config/
+
+# Install the package
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir .
+
+# Set environment variables
+ENV FLEX_TEMPLATE_PYTHON_PY_FILE="${WORKDIR}/src/streaming/pipeline.py"
+ENV FLEX_TEMPLATE_PYTHON_SETUP_FILE="${WORKDIR}/setup.py"
+
+# Copy the entrypoint script
+COPY docker/entrypoint-dataflow.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,0 +1,92 @@
+{
+  "description": "Gold layer fact table for deliveries",
+  "schema": [
+    {
+      "name": "delivery_id",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Unique delivery identifier"
+    },
+    {
+      "name": "shipment_id",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Associated shipment identifier"
+    },
+    {
+      "name": "delivery_date",
+      "type": "DATE",
+      "mode": "REQUIRED",
+      "description": "Delivery date (partition key)"
+    },
+    {
+      "name": "facility_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Origin facility identifier"
+    },
+    {
+      "name": "driver_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Driver identifier"
+    },
+    {
+      "name": "carrier_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Carrier identifier"
+    },
+    {
+      "name": "status",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Final delivery status"
+    },
+    {
+      "name": "scheduled_time",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "Originally scheduled delivery time"
+    },
+    {
+      "name": "delivery_time",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "Actual delivery time"
+    },
+    {
+      "name": "first_attempt_time",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "Time of first delivery attempt"
+    },
+    {
+      "name": "attempt_count",
+      "type": "INT64",
+      "mode": "NULLABLE",
+      "description": "Number of delivery attempts"
+    },
+    {
+      "name": "on_time_flag",
+      "type": "BOOL",
+      "mode": "NULLABLE",
+      "description": "Whether delivery was on time"
+    },
+    {
+      "name": "delivery_duration_minutes",
+      "type": "INT64",
+      "mode": "NULLABLE",
+      "description": "Duration from first attempt to completion in minutes"
+    }
+  ],
+  "partitioning": {
+    "type": "DAY",
+    "field": "delivery_date"
+  },
+  "clustering": ["facility_id", "carrier_id"],
+  "labels": {
+    "layer": "gold",
+    "type": "fact"
+  }
+}

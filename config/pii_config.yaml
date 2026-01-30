@@ -1,0 +1,78 @@
+# PII field configuration for masking/tokenization
+# Fields listed here will be masked or tokenized in the streaming pipeline
+
+# Exact field name matches (case-insensitive)
+pii_fields:
+  - first_name
+  - last_name
+  - full_name
+  - name
+  - email
+  - phone
+  - phone_number
+  - mobile_phone
+  - home_phone
+  - work_phone
+  - address
+  - street
+  - street_address
+  - ssn
+  - social_security_number
+  - license_number
+  - driver_license
+  - drivers_license
+  - credit_card
+  - card_number
+  - bank_account
+  - account_number
+  - routing_number
+  - signed_by
+  - signature
+  - date_of_birth
+  - dob
+  - ip_address
+  - user_agent
+
+# Regex patterns for field name matching
+pii_patterns:
+  - ".*_name$"
+  - ".*email.*"
+  - ".*phone.*"
+  - ".*address.*"
+  - ".*ssn.*"
+  - ".*license.*"
+  - ".*_dob$"
+  - ".*birth.*"
+
+# Fields to completely remove (not mask)
+remove_fields:
+  - password
+  - secret
+  - api_key
+  - auth_token
+
+# Field-specific masking strategies
+masking_strategies:
+  email:
+    type: partial
+    pattern: "first_char@domain_partial"
+  phone:
+    type: partial
+    pattern: "last_4_digits"
+  name:
+    type: partial
+    pattern: "first_initial"
+  address:
+    type: partial
+    pattern: "first_3_words"
+  default:
+    type: full
+    pattern: "***"
+
+# Tokenization settings (if using tokenization instead of masking)
+tokenization:
+  enabled: false
+  algorithm: "hmac-sha256"
+  salt_from_secret: true
+  token_prefix: "tok_"
+  token_length: 16

@@ -1,0 +1,38 @@
+# Development environment configuration
+# Overrides base.yaml settings for dev
+
+log_level: DEBUG
+
+dataflow:
+  max_workers: 3
+  num_workers: 1
+  machine_type: "n1-standard-2"
+  disk_size_gb: 30
+  window_duration_seconds: 60
+  allowed_lateness_seconds: 3600
+
+streaming:
+  window_duration_seconds: 60
+  allowed_lateness_seconds: 3600
+  dedupe_window_hours: 4
+  early_trigger_seconds: 30
+  enable_pii_masking: true
+
+# Lower thresholds for dev
+quality:
+  min_daily_events: 10
+  max_null_rate: 0.10
+  max_duplicate_rate: 0.05
+
+# Dev-specific SLA thresholds
+sla:
+  max_streaming_lag_minutes: 60
+  max_partition_delay_hours: 6
+  min_hourly_events: 1
+
+# Reduced retention for dev
+retention:
+  raw_bucket_nearline_days: 7
+  raw_bucket_coldline_days: 30
+  raw_bucket_delete_days: 90
+  bq_partition_expiration_days: 90

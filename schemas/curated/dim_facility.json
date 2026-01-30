@@ -1,0 +1,108 @@
+{
+  "description": "Gold layer dimension table for facilities (SCD Type 2)",
+  "schema": [
+    {
+      "name": "facility_id",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Facility identifier"
+    },
+    {
+      "name": "facility_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Facility name"
+    },
+    {
+      "name": "facility_type",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Type (warehouse, distribution_center, cross_dock, last_mile_hub)"
+    },
+    {
+      "name": "address",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Street address"
+    },
+    {
+      "name": "city",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "City"
+    },
+    {
+      "name": "state",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "State/Province"
+    },
+    {
+      "name": "country",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Country"
+    },
+    {
+      "name": "postal_code",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Postal code"
+    },
+    {
+      "name": "latitude",
+      "type": "FLOAT64",
+      "mode": "NULLABLE",
+      "description": "Latitude coordinate"
+    },
+    {
+      "name": "longitude",
+      "type": "FLOAT64",
+      "mode": "NULLABLE",
+      "description": "Longitude coordinate"
+    },
+    {
+      "name": "timezone",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "Facility timezone"
+    },
+    {
+      "name": "capacity_units",
+      "type": "INT64",
+      "mode": "NULLABLE",
+      "description": "Storage capacity in units"
+    },
+    {
+      "name": "is_active",
+      "type": "BOOL",
+      "mode": "NULLABLE",
+      "description": "Is facility currently active"
+    },
+    {
+      "name": "effective_from",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED",
+      "description": "SCD2 - When this version became effective"
+    },
+    {
+      "name": "effective_to",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "SCD2 - When this version was superseded (null if current)"
+    },
+    {
+      "name": "is_current",
+      "type": "BOOL",
+      "mode": "REQUIRED",
+      "description": "SCD2 - Is this the current version"
+    }
+  ],
+  "partitioning": null,
+  "clustering": ["facility_type", "is_current"],
+  "labels": {
+    "layer": "gold",
+    "type": "dimension",
+    "scd_type": "2"
+  }
+}
